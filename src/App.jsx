@@ -1,20 +1,21 @@
 import { Header } from "./components/layout/Header";
 import { Sidebar } from "./components/layout/Sidebar";
+import { AppRoutes } from "./routes/AppRoutes";
+
 function App() {
-
-
   return (
     <>
       <Header />
-      <div class="grid contenedor contenido-principal">
+
+      <div className="grid contenedor contenido-principal">
         <Sidebar />
 
-        <main class="caja-contenido col-9">
-           // TODO:  
+        <main className="caja-contenido col-9">
+          <AppRoutes />         
         </main>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
