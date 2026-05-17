@@ -1,9 +1,6 @@
 import { useState } from "react"
 
 
-
-
-
 export const NewCustomer = () => {
     
     const [customer, setCustomer] = useState({
@@ -23,11 +20,20 @@ const newCustomer  = e =>{
         ...customer,
         [e.target.name]  : e.target.value
     })
+    // console.log(customer)
+}
 
-    console.log(customer)
-}    
-    
-    
+// Función para validar le formulario
+const checkCustomer = () =>{
+    // Destructuring
+    const {name, lastname, company, email, telefono} = customer
+
+    let validate =  !name.length || !lastname.length || !company.length || !email.length || !telefono.length 
+
+    // return ture o false
+    return  validate
+}
+
     return(
         <>
             <h2>Nuevo Cliente</h2>
@@ -39,7 +45,7 @@ const newCustomer  = e =>{
                     <input 
                         type="text"
                         placeholder="Nombre Cliente"
-                        name="nombre" 
+                        name="name" 
                         onChange={newCustomer}
                     />
                 </div>
@@ -49,7 +55,7 @@ const newCustomer  = e =>{
                     <input 
                         type="text"
                         placeholder="Apellido Cliente"
-                        name="apellido" 
+                        name="lastname" 
                         onChange={newCustomer}
                     />
                 </div>
@@ -59,7 +65,7 @@ const newCustomer  = e =>{
                     <input 
                         type="text"
                         placeholder="Empresa Cliente"
-                        name="empresa" 
+                        name="company" 
                         onChange={newCustomer}
                     />
                 </div>
@@ -89,6 +95,7 @@ const newCustomer  = e =>{
                         type="submit"
                         className="btn btn-azul"
                         value="Agregar Cliente" 
+                        disabled= {checkCustomer()}
                     />
                 </div>
             </form>
