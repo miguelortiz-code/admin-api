@@ -1,4 +1,33 @@
+import { useState } from "react"
+
+
+
+
+
 export const NewCustomer = () => {
+    
+    const [customer, setCustomer] = useState({
+    name: '',
+    lastname: '',
+    company: '',
+    email: '',
+    telefono: ''
+});
+    
+
+// Leer datos del formulario
+const newCustomer  = e =>{
+    // Almacenar lo que el usuario en el estate
+    setCustomer({
+        // Obtener una copia del state actual
+        ...customer,
+        [e.target.name]  : e.target.value
+    })
+
+    console.log(customer)
+}    
+    
+    
     return(
         <>
             <h2>Nuevo Cliente</h2>
@@ -7,34 +36,62 @@ export const NewCustomer = () => {
 
                 <div className="campo">
                     <label>Nombre:</label>
-                    <input type="text" placeholder="Nombre Cliente" name="nombre" />
+                    <input 
+                        type="text"
+                        placeholder="Nombre Cliente"
+                        name="nombre" 
+                        onChange={newCustomer}
+                    />
                 </div>
 
                 <div className="campo">
                     <label>Apellido:</label>
-                    <input type="text" placeholder="Apellido Cliente" name="apellido" />
+                    <input 
+                        type="text"
+                        placeholder="Apellido Cliente"
+                        name="apellido" 
+                        onChange={newCustomer}
+                    />
                 </div>
             
                 <div className="campo">
                     <label>Empresa:</label>
-                    <input type="text" placeholder="Empresa Cliente" name="empresa" />
+                    <input 
+                        type="text"
+                        placeholder="Empresa Cliente"
+                        name="empresa" 
+                        onChange={newCustomer}
+                    />
                 </div>
 
                 <div className="campo">
                     <label>Email:</label>
-                    <input type="email" placeholder="Email Cliente" name="email" />
+                    <input 
+                        type="email"
+                        placeholder="Email Cliente"
+                        name="email" 
+                        onChange={newCustomer}
+                    />
                 </div>
 
                 <div className="campo">
                     <label>Teléfono:</label>
-                    <input type="email" placeholder="Teléfono Cliente" name="telefono" />
+                    <input 
+                        type="email"
+                        placeholder="Teléfono Cliente"
+                        name="telefono" 
+                        onChange={newCustomer}
+                    />
                 </div>
 
                 <div className="enviar">
-                    <input type="submit" className="btn btn-azul" value="Agregar Cliente" />
+                    <input 
+                        type="submit"
+                        className="btn btn-azul"
+                        value="Agregar Cliente" 
+                    />
                 </div>
             </form>
-
         </>
     )
 }
