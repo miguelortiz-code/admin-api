@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { customerAxios } from '../../config/axios.js';
+import {Card} from '../../components/organism/Card.jsx'
 
 export const Customers = () => {
 
@@ -23,12 +24,10 @@ export const Customers = () => {
       <h1>Clientes</h1>
       <ul className='listado-clientes'>
         {customers.map(customer => (
-        //   <li key={customer.id}>
-        //     <p>{customer.nombre}</p>
-        //     <p>{customer.email}</p>
-        //   </li>
-        console.log(customer)
-        ))}
+          <Card
+          key={customer._id}
+          customer={customer} />
+        )) }
       </ul>
     </>
   );
