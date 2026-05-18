@@ -1,5 +1,5 @@
 import { useState } from "react"
-
+import {customerAxios} from '../../config/axios'
 
 export const NewCustomer = () => {
     
@@ -13,7 +13,7 @@ export const NewCustomer = () => {
     
 
 // Leer datos del formulario
-const newCustomer  = e =>{
+const getData  = e =>{
     // Almacenar lo que el usuario en el estate
     setCustomer({
         // Obtener una copia del state actual
@@ -34,10 +34,21 @@ const checkCustomer = () =>{
     return  validate
 }
 
+// Función para enviar a la REST API y agregar nuevo cliente
+const newCustomer = e => {
+    e.preventDefault();
+    // Enviar petiación mediante axios
+    customerAxios.post('/new-customer', customer).then(res =>{
+        console.log(res.data);
+    });
+}
+
     return(
         <>
             <h2>Nuevo Cliente</h2>
-            <form>
+            <form
+                onSubmit={newCustomer}
+            >
                 <legend>Llena todos los campos</legend>
 
                 <div className="campo">
@@ -46,7 +57,7 @@ const checkCustomer = () =>{
                         type="text"
                         placeholder="Nombre Cliente"
                         name="name" 
-                        onChange={newCustomer}
+                        onChange={getData}
                     />
                 </div>
 
@@ -56,7 +67,7 @@ const checkCustomer = () =>{
                         type="text"
                         placeholder="Apellido Cliente"
                         name="lastname" 
-                        onChange={newCustomer}
+                        onChange={getData}
                     />
                 </div>
             
@@ -66,7 +77,7 @@ const checkCustomer = () =>{
                         type="text"
                         placeholder="Empresa Cliente"
                         name="company" 
-                        onChange={newCustomer}
+                        onChange={getData}
                     />
                 </div>
 
@@ -76,17 +87,17 @@ const checkCustomer = () =>{
                         type="email"
                         placeholder="Email Cliente"
                         name="email" 
-                        onChange={newCustomer}
+                        onChange={getData}
                     />
                 </div>
 
                 <div className="campo">
                     <label>Teléfono:</label>
                     <input 
-                        type="email"
+                        type="text"
                         placeholder="Teléfono Cliente"
                         name="telefono" 
-                        onChange={newCustomer}
+                        onChange={getData}
                     />
                 </div>
 
