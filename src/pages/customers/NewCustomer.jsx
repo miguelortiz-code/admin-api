@@ -1,8 +1,11 @@
 import { useState } from "react"
+import Swal from 'sweetalert2'
+import { useNavigate } from "react-router-dom"
 import {customerAxios} from '../../config/axios'
 
 export const NewCustomer = () => {
     
+    const navigate = useNavigate();
     const [customer, setCustomer] = useState({
     name: '',
     lastname: '',
@@ -37,10 +40,43 @@ const checkCustomer = () =>{
 // Función para enviar a la REST API y agregar nuevo cliente
 const newCustomer = e => {
     e.preventDefault();
-    // Enviar petiación mediante axios
-    customerAxios.post('/new-customer', customer).then(res =>{
-        console.log(res.data);
-    });
+    customerAxios.post('/new-customer', customer)
+        .then(() => {
+            //  ÉXITO
+            Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            }).fire({
+                icon: "success",
+                text: "Cliente creado correctamente",
+            }).then(() => {
+                navigate('/');
+            });
+        })
+        .catch(error => {
+            // ERROR
+            Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            }).fire({
+                icon: "error",
+                text: error.response?.data?.message || "Error al crear el cliente"
+            });
+        });
 }
 
     return(
