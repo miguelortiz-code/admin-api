@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect} from "react"
 import Swal from 'sweetalert2'
 import { useNavigate, useParams } from "react-router-dom"
 import {customerAxios} from '../../config/axios'
@@ -6,8 +6,7 @@ import {customerAxios} from '../../config/axios'
 export const UpdatedCustomer = () => {
     
     // Obtener el id del cliente mediante el params
-    const {id} = useParams()
-    console.log(id);
+    const {id} = useParams();
 
 
     const navigate = useNavigate();
@@ -18,7 +17,17 @@ export const UpdatedCustomer = () => {
     email: '',
     telefono: ''
 });
-    
+   
+
+// Utilizar useEffect cuando el componente carga y realizar la consulta a la api
+useEffect(() => {
+    const queryAPI = async () => {
+        const customerQuery = await customerAxios.get(`/customer/${id}`);
+        setCustomer(customerQuery.data.data);
+    }
+    queryAPI();
+}, [id]);
+
 
 // Leer datos del formulario
 const getData  = e =>{
@@ -32,21 +41,20 @@ const getData  = e =>{
 }
 
 // Función para validar le formulario
-const checkCustomer = () =>{
-    // Destructuring
+const checkCustomer = () => {
     const {name, lastname, company, email, telefono} = customer
 
-    let validate =  !name.length || !lastname.length || !company.length || !email.length || !telefono.length 
+    if(!name || !lastname || !company || !email || !telefono) return true
 
-    // return ture o false
-    return  validate
+    let validate = !name.length || !lastname.length || !company.length || !email.length || !telefono.length
+
+    return validate
 }
-
 
 
     return(
         <>
-            <h2>Nuevo Cliente</h2>
+            <h2>Edita Cliente</h2>
             <form>
                 <legend>Llena todos los campos</legend>
 
@@ -57,6 +65,7 @@ const checkCustomer = () =>{
                         placeholder="Nombre Cliente"
                         name="name" 
                         onChange={getData}
+                        value={customer.name || ''}
                     />
                 </div>
 
@@ -67,6 +76,7 @@ const checkCustomer = () =>{
                         placeholder="Apellido Cliente"
                         name="lastname" 
                         onChange={getData}
+                        value={customer.lastname || ''}
                     />
                 </div>
             
@@ -77,6 +87,7 @@ const checkCustomer = () =>{
                         placeholder="Empresa Cliente"
                         name="company" 
                         onChange={getData}
+                        value={customer.company || ''}
                     />
                 </div>
 
@@ -87,6 +98,7 @@ const checkCustomer = () =>{
                         placeholder="Email Cliente"
                         name="email" 
                         onChange={getData}
+                        value={customer.email || ''}
                     />
                 </div>
 
@@ -97,6 +109,8 @@ const checkCustomer = () =>{
                         placeholder="Teléfono Cliente"
                         name="telefono" 
                         onChange={getData}
+                        value={customer.telefono || ''}
+                    
                     />
                 </div>
 
@@ -104,7 +118,7 @@ const checkCustomer = () =>{
                     <input 
                         type="submit"
                         className="btn btn-azul"
-                        value="Agregar Cliente" 
+                        value="Actualiza Cliente" 
                         disabled= {checkCustomer()}
                     />
                 </div>
