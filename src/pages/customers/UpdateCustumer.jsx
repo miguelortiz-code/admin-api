@@ -40,6 +40,51 @@ const getData  = e =>{
     // console.log(customer)
 }
 
+
+// Enviar una petición por axiós para actualizar al cliente
+const updatedeCustomer = (e) => {
+    e.preventDefault();
+    // Enviar la petición  por axios
+    customerAxios.put(`/customer/${id}`, customer)
+            .then(() => {
+            //  ÉXITO
+            Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            }).fire({
+                icon: "success",
+                text: "Cliente actualizado correctamente",
+            }).then(() => {
+                navigate('/');
+            });
+        })
+        .catch(error => {
+            // ERROR
+            Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            }).fire({
+                icon: "error",
+                text: error.response?.data?.message || "Error al crear el cliente"
+            });
+        });
+}
+
+
 // Función para validar le formulario
 const checkCustomer = () => {
     const {name, lastname, company, email, telefono} = customer
@@ -55,7 +100,9 @@ const checkCustomer = () => {
     return(
         <>
             <h2>Edita Cliente</h2>
-            <form>
+            <form
+                onSubmit={updatedeCustomer}
+            >
                 <legend>Llena todos los campos</legend>
 
                 <div className="campo">
