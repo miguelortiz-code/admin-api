@@ -18,7 +18,7 @@ export const Customers = () => {
     };
 
     fetchCustomers();
-  }, []);
+  }, [customers]);
 
   return (
     <>

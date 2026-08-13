@@ -1,10 +1,34 @@
-import { Link } from "react-router-dom";
-
+import { Link} from "react-router-dom";
+import Swal from 'sweetalert2';
+import {customerAxios} from '../../config/axios'
 
 export const Card = ({customer}) => {
   
   const {_id, name, lastname, company, email, telefono} = customer;
   
+  const deleteCustomer = id => {
+    Swal.fire({
+      title: "¿Estas seguro?",
+      text: "¡Un cliente eliminado no se puede recuperar!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar!",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      
+      customerAxios.delete(`/customer/${id}`)
+      .then(res =>{
+        if (result.isConfirmed) Swal.fire({        
+        title: "Eliminado!",
+        text: res.data.message,
+        icon: "success"
+      });
+      });
+    });
+  }
+
   return (
     <>
       <li className="cliente">
@@ -19,7 +43,7 @@ export const Card = ({customer}) => {
             <i className="fas fa-pen-alt"></i>
             Editar Cliente
           </Link>
-          <button type="button" className="btn btn-rojo btn-eliminar">
+          <button type="button" className="btn btn-rojo btn-eliminar" onClick={() => deleteCustomer(_id)}>
             <i className="fas fa-times"></i>
             Eliminar Cliente
           </button>
