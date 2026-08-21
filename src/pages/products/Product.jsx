@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
-
+import Swal from 'sweetalert2';
+import { customerAxios } from '../../config/axios.js';
 
 export const Product = ({product}) => {
 
@@ -8,7 +9,28 @@ export const Product = ({product}) => {
 
   // Elimina un producto
   const deleteProduct = (id) =>{
-    console.log(`Eliminando... ${id}`);
+    Swal.fire({
+      title: "¿Estás seguro de eliminar este producto?",
+      text: "¡Una vez eliminado, no se puede recuperar!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "¡Sí, eliminar!",
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed)
+        customerAxios.delete(`/product/${id}`)
+        .then(res =>{
+          if(res.status === 200){
+            Swal.fire({
+                title: "Eliminado!",
+                text: result.data.message,
+                icon: "success"
+            });  
+          }
+        })
+    });
   }
 
 

@@ -20,7 +20,7 @@ export const Products = () =>{
         }
         // Llamar a la API
         fetchProducts();
-    }, []);
+    }, [products]);
 
 
 
