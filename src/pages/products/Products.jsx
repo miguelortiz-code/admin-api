@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { customerAxios } from '../../config/axios.js';
 import {Product} from './Product'
-
+import {Spinner} from '../../components/layout/Spinner'
 export const Products = () =>{
 
     // products = State, saveProduct = función para guardar el state
@@ -22,6 +22,9 @@ export const Products = () =>{
         fetchProducts();
     }, [products]);
 
+
+    // Spinner De Carga
+    if(!products.length) return <Spinner />
 
 
     return(

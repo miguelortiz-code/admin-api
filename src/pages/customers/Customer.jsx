@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { customerAxios } from '../../config/axios.js';
 import {Card} from '../../components/organism/Card.jsx'
+import {Spinner} from '../../components/layout/Spinner'
 
 export const Customers = () => {
 
@@ -19,6 +20,10 @@ export const Customers = () => {
 
     fetchCustomers();
   }, [customers]);
+
+      // Spinner De Carga
+      if(!customers.length) return <Spinner />
+  
 
   return (
     <>
