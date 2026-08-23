@@ -9,6 +9,22 @@ export const NewProduct = () =>{
     });
     // archivo/ file = state, setFile = Guardar imagen
     const [image, setImage] = useState('');
+
+    // Leer datos del formulario
+    const readData =  e => {
+        setProducts({
+            // Obtener copia del state
+            ...product,
+            [e.target.name] : e.target.value
+        });
+        console.log(product);
+    }
+
+    // Coloca la imagen en el state
+    const readImage = e => {
+        const file = e.target.files[0];
+        setImage(file);
+    };
     
     return(
         <>
@@ -19,17 +35,17 @@ export const NewProduct = () =>{
 
                 <div className="campo">
                     <label>Nombre:</label>
-                    <input type="text" placeholder="Nombre Producto" name="nombre" />
+                    <input type="text" placeholder="Nombre Producto" name="name" onChange={readData}/>
                 </div>
 
                 <div className="campo">
                     <label>Precio:</label>
-                    <input type="number" name="precio" min="0.00" step="0.01" placeholder="Precio" />
+                    <input type="number" name="price" min="0.00" step="0.01" placeholder="Precio" onChange={readData}/>
                 </div>
             
                 <div className="campo">
                     <label>Imagen:</label>
-                    <input type="file"  name="imagen" />
+                    <input type="file"  name="imagen" onChange={readImage} />
                 </div>
 
                 <div className="enviar">
