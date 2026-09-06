@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { customerAxios } from "../../config/axios";
 import { Spinner } from "../../components/layout/Spinner";
 
 export const UpdateProduct = () => {
+  const navigate = useNavigate();
   // Obtener ID del producto desde la URL
   const { id } = useParams();
 
@@ -38,6 +39,62 @@ export const UpdateProduct = () => {
     queryApi();
   }, [id]);
 
+  // Almacenar cambios en la BD
+  const updatedProduct = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", product.name);
+    formData.append("price", product.price);
+    formData.append("image", images);
+
+    // Almacenar en la BD
+    try {
+      const res = await customerAxios.put(`/product/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      // console.log(res);
+      // Lanzar alerta
+      if (res.status === 200) {
+        Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        })
+          .fire({
+            icon: "success",
+            text: res.data.message,
+          })
+          .then(() => {
+            navigate("/products");
+          });
+      }
+    } catch (error) {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "error",
+        text: error.response?.data?.message || "Error al editar el producto",
+      });
+    }
+  };
+
   // Leer datos del formulario
   const readData = (e) => {
     setProduct({
@@ -65,7 +122,7 @@ export const UpdateProduct = () => {
     <>
       <h2>Editar Producto</h2>
 
-      <form>
+      <form onSubmit={updatedProduct}>
         <legend>Llena todos los campos</legend>
 
         <div className="campo">
@@ -104,12 +161,7 @@ export const UpdateProduct = () => {
               width={300}
             />
           )}
-
-          <input
-            type="file"
-            name="image"
-            onChange={readImage}
-          />
+          <input type="file" name="image" onChange={readImage} />
         </div>
 
         <div className="enviar">
