@@ -6,6 +6,7 @@ import {Products} from '../pages/products/Products'
 import {NewProduct} from '../pages/products/NewProduct';
 import {UpdateProduct} from '../pages/products/UpdateProduct';
 import {Orders} from '../pages/orders/Orders'
+import {NewOrder} from '../pages/orders/NewOrder'
 
 export const AppRoutes = () =>{
     return(
@@ -17,9 +18,9 @@ export const AppRoutes = () =>{
             <Route path="/products" element= {< Products /> } /> 
             <Route path="/products/new-product" element={< NewProduct />} />
             <Route path="/product/:id" element={< UpdateProduct />} />
-                
             {/* Pedidos */}
             <Route path="/orders" element= {< Orders /> } />
+            <Route path="/orders/new-order/:id" element={< NewOrder /> } />
         </Routes>
     )
 }
