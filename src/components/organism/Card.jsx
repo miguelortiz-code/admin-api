@@ -43,6 +43,10 @@ export const Card = ({customer}) => {
             <i className="fas fa-pen-alt"></i>
             Editar Cliente
           </Link>
+          <Link to={`/orders/new-order/${_id}`} className="btn btn-amarillo">
+            <i className="fas fa-plus"></i>
+            Realizar Pedido
+          </Link>
           <button type="button" className="btn btn-rojo btn-eliminar" onClick={() => deleteCustomer(_id)}>
             <i className="fas fa-times"></i>
             Eliminar Cliente
