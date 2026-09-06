@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {useParams} from 'react-router-dom';
 import { customerAxios } from '../../config/axios.js';
+import { FormSearchProduct } from "../../components/organism/FormSearchProduct.jsx";
 
 export const NewOrder = () => {
 
@@ -19,7 +20,15 @@ export const NewOrder = () => {
         queryCustomer();
     }, []);
 
+    
+    // Buscar Producto
+    const searchProduct = () =>{
 
+    }
+
+    const readDataSearch = () =>{
+
+    }
 
   return (
     <>
@@ -32,13 +41,11 @@ export const NewOrder = () => {
         <p>{customer.telefono}</p>
       </div>
 
-      <form>
         <legend>Busca un Producto y agrega una cantidad</legend>
-
-        <div className="campo">
-          <label>Productos:</label>
-          <input type="text" placeholder="Nombre Productos" name="productos" />
-        </div>
+        <FormSearchProduct
+          searchProduct ={searchProduct}
+          readDataSearch= {readDataSearch}
+        />
 
         <ul className="resumen">
           <li>
@@ -105,7 +112,6 @@ export const NewOrder = () => {
         <div className="enviar">
           <input type="submit" className="btn btn-azul" value="Agregar Pedido" />
         </div>
-      </form>
     </>
   );
 };
