@@ -1,34 +1,72 @@
 import { useState, useEffect } from "react";
-import {useParams} from 'react-router-dom';
-import { customerAxios } from '../../config/axios.js';
+import { useParams } from "react-router-dom";
+import { customerAxios } from "../../config/axios.js";
 import { FormSearchProduct } from "../../components/organism/FormSearchProduct.jsx";
+import Swal from "sweetalert2";
 
 export const NewOrder = () => {
+  // Obtener el ID del cliente
+  const { id } = useParams();
 
-    // Obtener el ID del cliente
-    const { id } = useParams();
+  // State
+  const [customer, setCustomer] = useState({});
+  const [search, setSearch] = useState("");
 
-    // State
-    const [customer, setCustomer] = useState ({});
+  useEffect(() => {
+    // Obtener la información del cliente
+    const queryCustomer = async () => {
+      const res = await customerAxios.get(`/customer/${id}`);
+      setCustomer(res.data.data);
+    };
+    queryCustomer();
+  }, []);
 
-    useEffect(() => {
-        // Obtener la información del cliente
-        const queryCustomer = async () =>{
-            const res = await customerAxios.get(`/customer/${id}`);
-            setCustomer(res.data.data);
-        };
-        queryCustomer();
-    }, []);
+  // Buscar Producto
+  const searchProduct = async (e) => {
+    e.preventDefault();
+    // Obtener los productos de la busqueda
+    const result = await customerAxios.post(`/products/search/${search}`);
 
-    
-    // Buscar Producto
-    const searchProduct = () =>{
-
+    // Si no hay resultados mostrar alerta
+    if (result.data[0]) {
+      // Swal.mixin({
+      //   toast: true,
+      //   position: "top-end",
+      //   showConfirmButton: false,
+      //   timer: 3000,
+      //   timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.onmouseenter = Swal.stopTimer;
+      //     toast.onmouseleave = Swal.resumeTimer;
+      //   },
+      // })
+      //   .fire({
+      //     icon: "success",
+      //     text: res.data.message,
+      //   })
+    } else {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "error",
+        text: 'No hay resultados para tu busqueda',
+      });
     }
 
-    const readDataSearch = () =>{
-
-    }
+    console.log(result.data[0]);
+  };
+  // Almacenar una busqueda en el state
+  const readDataSearch = (e) => {
+    setSearch(e.target.value);
+  };
 
   return (
     <>
@@ -36,82 +74,84 @@ export const NewOrder = () => {
 
       <div className="ficha-cliente">
         <h3>Datos de Cliente: </h3>
-        <p>{customer.name} {customer.lastname}</p>
+        <p>
+          {customer.name} {customer.lastname}
+        </p>
         <p>{customer.email}</p>
         <p>{customer.telefono}</p>
       </div>
 
-        <legend>Busca un Producto y agrega una cantidad</legend>
-        <FormSearchProduct
-          searchProduct ={searchProduct}
-          readDataSearch= {readDataSearch}
-        />
+      <legend>Busca un Producto y agrega una cantidad</legend>
+      <FormSearchProduct
+        searchProduct={searchProduct}
+        readDataSearch={readDataSearch}
+      />
 
-        <ul className="resumen">
-          <li>
-            <div className="texto-producto">
-              <p className="nombre">Macbook Pro</p>
-              <p className="precio">$250</p>
+      <ul className="resumen">
+        <li>
+          <div className="texto-producto">
+            <p className="nombre">Macbook Pro</p>
+            <p className="precio">$250</p>
+          </div>
+          <div className="acciones">
+            <div className="contenedor-cantidad">
+              <i className="fas fa-minus"></i>
+              <input type="text" name="cantidad" />
+              <i className="fas fa-plus"></i>
             </div>
-            <div className="acciones">
-              <div className="contenedor-cantidad">
-                <i className="fas fa-minus"></i>
-                <input type="text" name="cantidad" />
-                <i className="fas fa-plus"></i>
-              </div>
-              <button type="button" className="btn btn-rojo">
-                <i className="fas fa-minus-circle"></i>
-                Eliminar Producto
-              </button>
+            <button type="button" className="btn btn-rojo">
+              <i className="fas fa-minus-circle"></i>
+              Eliminar Producto
+            </button>
+          </div>
+        </li>
+        <li>
+          <div className="texto-producto">
+            <p className="nombre">Macbook Pro</p>
+            <p className="precio">$250</p>
+          </div>
+          <div className="acciones">
+            <div className="contenedor-cantidad">
+              <i className="fas fa-minus"></i>
+              <input type="text" name="cantidad" />
+              <i className="fas fa-plus"></i>
             </div>
-          </li>
-          <li>
-            <div className="texto-producto">
-              <p className="nombre">Macbook Pro</p>
-              <p className="precio">$250</p>
+            <button type="button" className="btn btn-rojo">
+              <i className="fas fa-minus-circle"></i>
+              Eliminar Producto
+            </button>
+          </div>
+        </li>
+        <li>
+          <div className="texto-producto">
+            <p className="nombre">Macbook Pro</p>
+            <p className="precio">$250</p>
+          </div>
+          <div className="acciones">
+            <div className="contenedor-cantidad">
+              <i className="fas fa-minus"></i>
+              <input type="text" name="cantidad" />
+              <i className="fas fa-plus"></i>
             </div>
-            <div className="acciones">
-              <div className="contenedor-cantidad">
-                <i className="fas fa-minus"></i>
-                <input type="text" name="cantidad" />
-                <i className="fas fa-plus"></i>
-              </div>
-              <button type="button" className="btn btn-rojo">
-                <i className="fas fa-minus-circle"></i>
-                Eliminar Producto
-              </button>
-            </div>
-          </li>
-          <li>
-            <div className="texto-producto">
-              <p className="nombre">Macbook Pro</p>
-              <p className="precio">$250</p>
-            </div>
-            <div className="acciones">
-              <div className="contenedor-cantidad">
-                <i className="fas fa-minus"></i>
-                <input type="text" name="cantidad" />
-                <i className="fas fa-plus"></i>
-              </div>
-              <button type="button" className="btn btn-rojo">
-                <i className="fas fa-minus-circle"></i>
-                Eliminar Producto
-              </button>
-            </div>
-          </li>
-        </ul>
-        <div className="campo">
-          <label>Total:</label>
-          <input
-            type="number"
-            name="precio"
-            placeholder="Precio"
-            readonly="readonly"
-          />
-        </div>
-        <div className="enviar">
-          <input type="submit" className="btn btn-azul" value="Agregar Pedido" />
-        </div>
+            <button type="button" className="btn btn-rojo">
+              <i className="fas fa-minus-circle"></i>
+              Eliminar Producto
+            </button>
+          </div>
+        </li>
+      </ul>
+      <div className="campo">
+        <label>Total:</label>
+        <input
+          type="number"
+          name="precio"
+          placeholder="Precio"
+          readonly="readonly"
+        />
+      </div>
+      <div className="enviar">
+        <input type="submit" className="btn btn-azul" value="Agregar Pedido" />
+      </div>
     </>
   );
 };
