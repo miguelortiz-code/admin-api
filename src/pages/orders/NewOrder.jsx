@@ -82,7 +82,10 @@ export const NewOrder = () => {
 
       <ul className="resumen">
         {product.map((product, index) =>(
-          <FormAmountProduct />
+          <FormAmountProduct 
+            key={product.product}
+            product={product}
+          />
         ))}
       </ul>
       <div className="campo">
