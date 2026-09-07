@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { customerAxios } from "../../config/axios.js";
 import { FormSearchProduct } from "../../components/organism/FormSearchProduct.jsx";
+import { FormAmountProduct } from "../../components/organism/FormAmountProduct.jsx";
 import Swal from "sweetalert2";
 
 export const NewOrder = () => {
@@ -80,23 +81,9 @@ export const NewOrder = () => {
       />
 
       <ul className="resumen">
-        <li>
-          <div className="texto-producto">
-            <p className="nombre">Macbook Pro</p>
-            <p className="precio">$250</p>
-          </div>
-          <div className="acciones">
-            <div className="contenedor-cantidad">
-              <i className="fas fa-minus"></i>
-              <input type="text" name="cantidad" />
-              <i className="fas fa-plus"></i>
-            </div>
-            <button type="button" className="btn btn-rojo">
-              <i className="fas fa-minus-circle"></i>
-              Eliminar Producto
-            </button>
-          </div>
-        </li>
+        {product.map((product, index) =>(
+          <FormAmountProduct />
+        ))}
       </ul>
       <div className="campo">
         <label>Total:</label>
