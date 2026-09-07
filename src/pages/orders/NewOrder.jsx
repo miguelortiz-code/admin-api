@@ -11,7 +11,7 @@ export const NewOrder = () => {
   // State
   const [customer, setCustomer] = useState({});
   const [search, setSearch] = useState("");
-
+  const [product, setProduct] = useState([]);
   useEffect(() => {
     // Obtener la información del cliente
     const queryCustomer = async () => {
@@ -29,21 +29,15 @@ export const NewOrder = () => {
 
     // Si no hay resultados mostrar alerta
     if (result.data[0]) {
-      // Swal.mixin({
-      //   toast: true,
-      //   position: "top-end",
-      //   showConfirmButton: false,
-      //   timer: 3000,
-      //   timerProgressBar: true,
-      //   didOpen: (toast) => {
-      //     toast.onmouseenter = Swal.stopTimer;
-      //     toast.onmouseleave = Swal.resumeTimer;
-      //   },
-      // })
-      //   .fire({
-      //     icon: "success",
-      //     text: res.data.message,
-      //   })
+
+      let resultProduct = result.data[0];
+
+      // Agregar llave "producto" (Copia resultado)
+      resultProduct.product = result.data[0]._id;
+      resultProduct.amount = 0;
+
+      // Guardar resultado en el State de product
+      setProduct([...product, resultProduct]);
     } else {
       Swal.mixin({
         toast: true,
@@ -60,8 +54,6 @@ export const NewOrder = () => {
         text: 'No hay resultados para tu busqueda',
       });
     }
-
-    console.log(result.data[0]);
   };
   // Almacenar una busqueda en el state
   const readDataSearch = (e) => {
@@ -88,40 +80,6 @@ export const NewOrder = () => {
       />
 
       <ul className="resumen">
-        <li>
-          <div className="texto-producto">
-            <p className="nombre">Macbook Pro</p>
-            <p className="precio">$250</p>
-          </div>
-          <div className="acciones">
-            <div className="contenedor-cantidad">
-              <i className="fas fa-minus"></i>
-              <input type="text" name="cantidad" />
-              <i className="fas fa-plus"></i>
-            </div>
-            <button type="button" className="btn btn-rojo">
-              <i className="fas fa-minus-circle"></i>
-              Eliminar Producto
-            </button>
-          </div>
-        </li>
-        <li>
-          <div className="texto-producto">
-            <p className="nombre">Macbook Pro</p>
-            <p className="precio">$250</p>
-          </div>
-          <div className="acciones">
-            <div className="contenedor-cantidad">
-              <i className="fas fa-minus"></i>
-              <input type="text" name="cantidad" />
-              <i className="fas fa-plus"></i>
-            </div>
-            <button type="button" className="btn btn-rojo">
-              <i className="fas fa-minus-circle"></i>
-              Eliminar Producto
-            </button>
-          </div>
-        </li>
         <li>
           <div className="texto-producto">
             <p className="nombre">Macbook Pro</p>
