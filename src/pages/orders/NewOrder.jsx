@@ -59,6 +59,20 @@ export const NewOrder = () => {
       resultProduct.product = result.data[0]._id;
       resultProduct.amount = 0;
 
+      // Validar si el producto ya fue agregado
+      const exitsProduct = product.some(
+        (productState) => productState.product === resultProduct.product
+      );
+
+      if (exitsProduct) {
+        Swal.fire({
+          icon: "warning",
+          title: "Producto ya agregado",
+          text: "Este producto ya está en tu pedido",
+        });
+        return;
+      }
+
       // Guardar resultado en el State de product
       setProduct([...product, resultProduct]);
     } else {
@@ -127,7 +141,6 @@ export const NewOrder = () => {
         <p>{customer.telefono}</p>
       </div>
 
-      <legend>Busca un Producto y agrega una cantidad</legend>
       <FormSearchProduct
         searchProduct={searchProduct}
         readDataSearch={readDataSearch}
