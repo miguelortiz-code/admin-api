@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { customerAxios } from "../../config/axios.js";
 import { FormSearchProduct } from "../../components/organism/FormSearchProduct.jsx";
 import { FormAmountProduct } from "../../components/organism/FormAmountProduct.jsx";
 import Swal from "sweetalert2";
 
 export const NewOrder = () => {
+
+  const navigate = useNavigate();
+
   // Obtener el ID del cliente
   const { id } = useParams();
 
@@ -163,6 +166,60 @@ export const NewOrder = () => {
     setProduct(allProducts);
   }
 
+  // Almacenar el pedido
+ const placeAnOrder =  async e => {
+    e.preventDefault();
+    
+    // Construir Objeto
+    const order = {
+      customer: id,
+      order: product,
+      total: total,
+    };
+    // console.log(order);
+    // Guardar Producto
+    try {
+      const res = await customerAxios.post("/orders", order);
+      // console.log(res);
+      // Lanzar alerta
+      if (res.status === 200) {
+        Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        })
+          .fire({
+            icon: "success",
+            text: res.data.message,
+          })
+          .then(() => {
+            navigate("/orders");
+          });
+      }
+    } catch (error) {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "error",
+        text: error.response?.data?.message || "Error al crear el cliente",
+      });
+    }
+  }
+
 
   return (
     <>
@@ -201,7 +258,9 @@ export const NewOrder = () => {
       {
         total  > 0 ? 
         (
-          <form>
+          <form
+            onSubmit={placeAnOrder}
+          >
             <input 
             type="submit" 
             className="btn btn-verde btn-block"
