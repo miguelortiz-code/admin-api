@@ -13,6 +13,27 @@ export const NewOrder = () => {
   const [customer, setCustomer] = useState({});
   const [search, setSearch] = useState("");
   const [product, setProduct] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  // Actualizar el valor total
+  const totalValue = () =>{
+    // Si el arrglo de productos = 0. El Total es = 0
+    if(product.length === 0){
+      setTotal(0);
+      return;
+    }
+
+    // Calular el nuevo Total
+    let newTotal = 0;
+
+    // Recorrer todos los productos, cantidades y precios
+    product.map(product => newTotal+= (product.amount * product.price ) );
+
+    // Almacenar el total
+    setTotal(newTotal);
+  }
+  
+  
   useEffect(() => {
     // Obtener la información del cliente
     const queryCustomer = async () => {
@@ -20,7 +41,8 @@ export const NewOrder = () => {
       setCustomer(res.data.data);
     };
     queryCustomer();
-  }, []);
+    totalValue();
+  }, [product]);
 
   // Buscar Producto
   const searchProduct = async (e) => {
@@ -118,18 +140,23 @@ export const NewOrder = () => {
           />
         ))}
       </ul>
-      <div className="campo">
-        <label>Total:</label>
-        <input
-          type="number"
-          name="precio"
-          placeholder="Precio"
-          readOnly="readonly"
-        />
-      </div>
-      <div className="enviar">
-        <input type="submit" className="btn btn-azul" value="Agregar Pedido" />
-      </div>
+        
+      <p className="total">Total a pagar: <span>${Number(total).toLocaleString('es-CO')}</span></p>
+      
+      {
+        total  > 0 ? 
+        (
+          <form>
+            <input 
+            type="submit" 
+            className="btn btn-verde btn-block"
+            value="Realizar Pedido"
+            />
+          </form>
+        )
+        :
+        null
+      }
     </>
   );
 };
