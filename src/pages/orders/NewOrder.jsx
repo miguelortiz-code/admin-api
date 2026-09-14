@@ -63,14 +63,27 @@ export const NewOrder = () => {
 
   // Actualizar la cantidad de productos
   const subtractProducts = i => {
-    console.log('Quitar producto...', i);
-    // console.log(product);
+    // Copiar el arreglo original
+    const allProducts = [...product];
+
+    // Validar la cantidad inicial en 0
+    if(allProducts[i].amount === 0) return;
+
+    // Disminuir cantidad
+    allProducts[i].amount--;
+
+    // Almacenar la cantidad en el state
+    setProduct(allProducts);
   }
 
 
   const addProducts = i => {
-    console.log('Sumar productos', i);
-    // console.log(product);
+    // Copiar el arreglo 
+    const allProducts = [...product];
+    // Incremento de cantidad de los productos
+    allProducts[i].amount++;
+    // Almacenar la cantidad en el state
+    setProduct(allProducts);
   }
 
 
