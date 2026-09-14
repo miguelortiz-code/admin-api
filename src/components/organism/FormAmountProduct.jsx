@@ -1,6 +1,6 @@
-export const FormAmountProduct = ({product}) => {
+export const FormAmountProduct = ({ product, subtractProducts, addProducts, index }) => {
 
-    const {name, price, amount} = product;
+  const { name, price, amount } = product;
 
   return (
     <>
@@ -11,9 +11,9 @@ export const FormAmountProduct = ({product}) => {
         </div>
         <div className="acciones">
           <div className="contenedor-cantidad">
-            <i className="fas fa-minus"></i>
-                <p>{amount}</p>
-            <i className="fas fa-plus"></i>
+            <i className="fas fa-minus" onClick={() => subtractProducts(index)}></i>
+            <p>{amount}</p>
+            <i className="fas fa-plus" onClick={() => addProducts(index)}></i>
           </div>
           <button type="button" className="btn btn-rojo">
             <i className="fas fa-minus-circle"></i>

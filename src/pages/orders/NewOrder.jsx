@@ -61,6 +61,20 @@ export const NewOrder = () => {
     setSearch(e.target.value);
   };
 
+  // Actualizar la cantidad de productos
+  const subtractProducts = i => {
+    console.log('Quitar producto...', i);
+    // console.log(product);
+  }
+
+
+  const addProducts = i => {
+    console.log('Sumar productos', i);
+    // console.log(product);
+  }
+
+
+
   return (
     <>
       <h2>Nuevo Pedido</h2>
@@ -83,8 +97,11 @@ export const NewOrder = () => {
       <ul className="resumen">
         {product.map((product, index) =>(
           <FormAmountProduct 
+            index={index}
             key={product.product}
             product={product}
+            subtractProducts = {subtractProducts}
+            addProducts = {addProducts}
           />
         ))}
       </ul>
@@ -94,7 +111,7 @@ export const NewOrder = () => {
           type="number"
           name="precio"
           placeholder="Precio"
-          readonly="readonly"
+          readOnly="readonly"
         />
       </div>
       <div className="enviar">
