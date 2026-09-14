@@ -14,11 +14,12 @@ export const NewOrder = () => {
   const [search, setSearch] = useState("");
   const [product, setProduct] = useState([]);
   const [total, setTotal] = useState(0);
+  const [suggestions, setSuggestions] = useState([]);
 
   // Actualizar el valor total
-  const totalValue = () =>{
+  const totalValue = () => {
     // Si el arrglo de productos = 0. El Total es = 0
-    if(product.length === 0){
+    if (product.length === 0) {
       setTotal(0);
       return;
     }
@@ -27,13 +28,12 @@ export const NewOrder = () => {
     let newTotal = 0;
 
     // Recorrer todos los productos, cantidades y precios
-    product.map(product => newTotal+= (product.amount * product.price ) );
+    product.map((product) => (newTotal += product.amount * product.price));
 
     // Almacenar el total
     setTotal(newTotal);
-  }
-  
-  
+  };
+
   useEffect(() => {
     // Obtener la información del cliente
     const queryCustomer = async () => {
@@ -43,6 +43,22 @@ export const NewOrder = () => {
     queryCustomer();
     totalValue();
   }, [product]);
+
+  // Buscar sugerencias mientras escribes (con debounce)
+  useEffect(() => {
+    if (search.trim() === "") {
+      setSuggestions([]);
+      return;
+    }
+
+    const delayDebounce = setTimeout(async () => {
+      const result = await customerAxios.post(`/products/search/${search}`);
+      setSuggestions(result.data);
+    }, 300);
+
+    // Limpia el timeout anterior si el usuario sigue escribiendo
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
 
   // Buscar Producto
   const searchProduct = async (e) => {
@@ -60,11 +76,11 @@ export const NewOrder = () => {
       resultProduct.amount = 0;
 
       // Validar si el producto ya fue agregado
-      const exitsProduct = product.some(
+      const productoExistente = product.some(
         (productState) => productState.product === resultProduct.product
       );
 
-      if (exitsProduct) {
+      if (productoExistente) {
         Swal.fire({
           icon: "warning",
           title: "Producto ya agregado",
@@ -97,6 +113,31 @@ export const NewOrder = () => {
     setSearch(e.target.value);
   };
 
+  // Agregar producto desde una sugerencia
+  const selectProduct = (productoSeleccionado) => {
+    let resultProduct = { ...productoSeleccionado };
+    resultProduct.product = productoSeleccionado._id;
+    resultProduct.amount = 0;
+
+    // Validar si el producto ya fue agregado
+    const productoExistente = product.some(
+      (productState) => productState.product === resultProduct.product
+    );
+
+    if (productoExistente) {
+      Swal.fire({
+        icon: "warning",
+        title: "Producto ya agregado",
+        text: "Este producto ya está en tu pedido",
+      });
+      return;
+    }
+
+    setProduct([...product, resultProduct]);
+    setSearch("");
+    setSuggestions([]);
+  };
+
   // Actualizar la cantidad de productos
   const subtractProducts = i => {
     // Copiar el arreglo original
@@ -122,11 +163,6 @@ export const NewOrder = () => {
     setProduct(allProducts);
   }
 
-  // Eliminar un producto del State
-  const deleteProductOrder =  id => {
-    const allProducts = product.filter(product => product.product !== id);
-    setProduct(allProducts);
-  }
 
   return (
     <>
@@ -144,6 +180,8 @@ export const NewOrder = () => {
       <FormSearchProduct
         searchProduct={searchProduct}
         readDataSearch={readDataSearch}
+        suggestions={suggestions}
+        selectProduct={selectProduct}
       />
 
       <ul className="resumen">
@@ -154,7 +192,6 @@ export const NewOrder = () => {
             product={product}
             subtractProducts = {subtractProducts}
             addProducts = {addProducts}
-            deleteProductOrder = {deleteProductOrder}
           />
         ))}
       </ul>
