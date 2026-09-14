@@ -108,7 +108,11 @@ export const NewOrder = () => {
     setProduct(allProducts);
   }
 
-
+  // Eliminar un producto del State
+  const deleteProductOrder =  id => {
+    const allProducts = product.filter(product => product.product !== id);
+    setProduct(allProducts);
+  }
 
   return (
     <>
@@ -137,6 +141,7 @@ export const NewOrder = () => {
             product={product}
             subtractProducts = {subtractProducts}
             addProducts = {addProducts}
+            deleteProductOrder = {deleteProductOrder}
           />
         ))}
       </ul>

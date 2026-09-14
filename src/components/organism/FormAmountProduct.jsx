@@ -1,4 +1,4 @@
-export const FormAmountProduct = ({ product, subtractProducts, addProducts, index }) => {
+export const FormAmountProduct = ({ product, subtractProducts, addProducts, index, deleteProductOrder }) => {
 
   const { name, price, amount } = product;
 
@@ -15,7 +15,7 @@ export const FormAmountProduct = ({ product, subtractProducts, addProducts, inde
             <p>{amount}</p>
             <i className="fas fa-plus" onClick={() => addProducts(index)}></i>
           </div>
-          <button type="button" className="btn btn-rojo">
+          <button type="button" className="btn btn-rojo" onClick={() => deleteProductOrder(product.product)}>
             <i className="fas fa-minus-circle"></i>
             Eliminar Producto
           </button>
