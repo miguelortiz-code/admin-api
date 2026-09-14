@@ -1,32 +1,27 @@
-export const DetailsOrder = () => {
+export const DetailsOrder = ({order}) => {
+  // console.log(order.order);
+  const {customer} = order
+
   return (
     <>
         <li className="pedido">
           <div className="info-pedido">
-            <p className="id">ID: 0192019201291201</p>
-            <p className="nombre">Cliente: Juan Pablo De la torre</p>
+            <p className="id">ID: {order._id}</p>
+            <p className="nombre">Cliente: {customer.name} {customer.lastname}</p>
 
             <div className="articulos-pedido">
               <p className="productos">Artículos Pedido: </p>
               <ul>
-                <li>
-                  <p>Macbook Pro</p>
-                  <p>Precio: $3000</p>
-                  <p>Cantidad: 4</p>
-                </li>
-                <li>
-                  <p>Macbook Pro</p>
-                  <p>Precio: $3000</p>
-                  <p>Cantidad: 4</p>
-                </li>
-                <li>
-                  <p>Macbook Pro</p>
-                  <p>Precio: $3000</p>
-                  <p>Cantidad: 4</p>
-                </li>
+                    {order.order.map((article) => (
+                      <li key={order._id+article._id}>
+                        <p>{article.product?.name || 'Producto no disponible'}</p>
+                        <p>Precio: ${Number(article.product?.price || 0).toLocaleString('es-CO')}</p>
+                        <p>Cantidad: {article.amount}</p>
+                      </li>
+                    ))}
               </ul>
             </div>
-            <p className="total">Total: $3,500 </p>
+            <p className="total">Total:${Number(order?.total || 0).toLocaleString('es-CO')}</p>
           </div>
           <div className="acciones">
             <button type="button" className="btn btn-rojo btn-eliminar">

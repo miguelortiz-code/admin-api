@@ -170,10 +170,16 @@ export const NewOrder = () => {
  const placeAnOrder =  async e => {
     e.preventDefault();
     
+    // Mapear productos al formato que espera el schema
+    const orderProducts = product.map((item) => ({
+      product: item.product,
+      amount: item.amount,
+    }));
+
     // Construir Objeto
     const order = {
       customer: id,
-      order: product,
+      order: orderProducts,
       total: total,
     };
     // console.log(order);
