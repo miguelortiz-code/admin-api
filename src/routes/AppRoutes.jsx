@@ -7,6 +7,7 @@ import {NewProduct} from '../pages/products/NewProduct';
 import {UpdateProduct} from '../pages/products/UpdateProduct';
 import {Orders} from '../pages/orders/Orders'
 import {NewOrder} from '../pages/orders/NewOrder'
+import { Login } from "../components/auth/Login";
 
 export const AppRoutes = () =>{
     return(
@@ -21,6 +22,8 @@ export const AppRoutes = () =>{
             {/* Pedidos */}
             <Route path="/orders" element= {< Orders /> } />
             <Route path="/orders/new-order/:id" element={< NewOrder /> } />
+            {/* Login */}
+            <Route path="/login" element={< Login /> } />
         </Routes>
     )
 }
