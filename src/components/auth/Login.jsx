@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-
 export const Login = () => {
   const [credentials, setCredentials] = useState({});
 
   // Almacenar lo que el usuario escribe en el state
-  const readData = () => {
+  const readData = (e) => {
     setCredentials({
       ...credentials,
       [e.target.name]: e.target.value,
@@ -24,6 +23,7 @@ export const Login = () => {
               name="email"
               placeholder="correo@gmail.com"
               required
+              autoComplete="email"
               onChange={readData}
             />
           </div>
@@ -35,17 +35,17 @@ export const Login = () => {
               name="password"
               placeholder="*****"
               required
+              autoComplete="current-password"
               onChange={readData}
             />
           </div>
+          <input
+            type="submit"
+            value="Iniciar Sesión"
+            className="btn btn-verde btn-block"
+          />
         </form>
       </div>
-
-      <input
-        type="submit"
-        value="Iniciar Sesión"
-        className="btn btn-verde btn-block"
-      />
     </div>
   );
 };
