@@ -1,8 +1,61 @@
+import Swal from "sweetalert2";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {customerAxios} from '../../config/axios'; 
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({});
+  
+  // Iniciar sesión en el servidor
+  const login = async (e) => {
+    e.preventDefault();
 
+    // Autenticar usuario
+    try {
+      const response = await customerAxios.post("/login", credentials);
+      // Extraer token y colocarlo en el localstorage
+      const {token } = response.data;
+      localStorage.setItem('token', token);
+      // Alerta
+      Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        })
+          .fire({
+            icon: "success",
+            text: '¡Has iniciado sesión de manera correcta!',
+          })
+          .then(() => {
+            navigate("/");
+          });
+
+    } catch (error) {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "error",
+        text: error.response?.data?.message || "Error al iniciar sesion",
+      });
+    }
+  };
+  
+  
   // Almacenar lo que el usuario escribe en el state
   const readData = (e) => {
     setCredentials({
