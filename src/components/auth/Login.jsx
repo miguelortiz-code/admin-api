@@ -1,5 +1,16 @@
-export const Login = () => {
+import { useState } from "react";
 
+
+export const Login = () => {
+  const [credentials, setCredentials] = useState({});
+
+  // Almacenar lo que el usuario escribe en el state
+  const readData = () => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <div className="login">
