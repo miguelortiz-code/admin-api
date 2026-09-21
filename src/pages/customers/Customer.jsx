@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { customerAxios } from '../../config/axios.js';
 import {Card} from '../../components/organism/Card.jsx'
 import {Spinner} from '../../components/layout/Spinner'
+import { CRMContext } from '../../context/CRMContext.jsx';
 
 export const Customers = () => {
 
   const [customers, setCustomers] = useState([]);
+  const [auth, setAuth] = useContext(CRMContext);
 
+  console.log(auth);
   useEffect(() => {
     const fetchCustomers = async () => {
       try {

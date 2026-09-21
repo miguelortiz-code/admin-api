@@ -1,9 +1,12 @@
 import Swal from "sweetalert2";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {customerAxios} from '../../config/axios'; 
+import {customerAxios} from '../../config/axios';
+import { CRMContext } from "../../context/CRMContext"; 
 
 export const Login = () => {
+  // Auth y token
+  const [auth, setAuth] =  useContext(CRMContext);
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({});
   
@@ -17,6 +20,13 @@ export const Login = () => {
       // Extraer token y colocarlo en el localstorage
       const {token } = response.data;
       localStorage.setItem('token', token);
+
+      // Guardar el token en el state
+      setAuth({
+        token,
+        auth: true
+      });
+
       // Alerta
       Swal.mixin({
           toast: true,
