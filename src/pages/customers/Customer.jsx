@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom"
 import { Link } from 'react-router-dom';
 import { customerAxios } from '../../config/axios.js';
 import {Card} from '../../components/organism/Card.jsx'
@@ -6,22 +7,36 @@ import {Spinner} from '../../components/layout/Spinner'
 import { CRMContext } from '../../context/CRMContext.jsx';
 
 export const Customers = () => {
-
+  const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
   const [auth, setAuth] = useContext(CRMContext);
 
-  console.log(auth);
   useEffect(() => {
-    const fetchCustomers = async () => {
+    if(auth.token !== ''){
       try {
-        const response = await customerAxios.get('/customers');
-        setCustomers(response.data.customers);
-      } catch (error) {
-        console.error('Error al obtener clientes:', error);
-      }
-    };
+        const fetchCustomers = async () => {
+          try {
+            const response = await customerAxios.get('/customers',  {
+              headers:{
+                Authorization: `Bearer ${auth.token}`
+              }
+            });
+            setCustomers(response.data.customers);
+          } catch (error) {
+            console.error('Error al obtener clientes:', error);
+          }
+        };
 
-    fetchCustomers();
+        fetchCustomers();
+      } catch (error) {
+        // Error con authorizacion
+        if(error.response.status === 500){
+          navigate('/login');
+        }
+      }
+    }else{
+       navigate('/login');
+    }
   }, [customers]);
 
       // Spinner De Carga
