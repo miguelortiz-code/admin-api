@@ -8,19 +8,25 @@ import {UpdateProduct} from '../pages/products/UpdateProduct';
 import {Orders} from '../pages/orders/Orders'
 import {NewOrder} from '../pages/orders/NewOrder'
 import { Login } from "../components/auth/Login";
+import { ProtectedRoute } from "../components/auth/ProtectedRoute";
 
 export const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Customers />} />
-            <Route path="/customers/new-customer" element={<NewCustomer />} />
-            <Route path="/customers/:id" element={<UpdatedCustomer />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/new-product" element={<NewProduct />} />
-            <Route path="/product/:id" element={<UpdateProduct />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/orders/new-order/:id" element={<NewOrder />} />
+            {/* Ruta pública */}
             <Route path="/login" element={<Login />} />
+
+            {/* Rutas protegidas */}
+            <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Customers />} />
+                <Route path="/customers/new-customer" element={<NewCustomer />} />
+                <Route path="/customers/:id" element={<UpdatedCustomer />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/new-product" element={<NewProduct />} />
+                <Route path="/product/:id" element={<UpdateProduct />} />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/orders/new-order/:id" element={<NewOrder />} />
+            </Route>
         </Routes>
     )
 }
