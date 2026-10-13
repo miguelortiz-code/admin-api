@@ -3,10 +3,13 @@ import { createContext, useState } from "react";
 const CRMContext =  createContext([{}, () => {}]);
 
 const CRMProvider = props =>{
-    // Definir el state inicial
-    const  [auth, setAuth] = useState({
-        token: '',
-        auth: false
+    
+    const [auth, setAuth] = useState(() => {
+        const token = localStorage.getItem('token');
+        return {
+            token: token || '',
+            auth: token ? true : false
+        };
     });
 
     return(
